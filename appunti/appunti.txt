@@ -1,0 +1,10 @@
+sito web con queste caratteristiche:
+
+- parte online accessibile a tutti: un paio di pagine di spiegazione sul progetto con inserite immagini e parti testuali
+
+- area riservata con due accessi: 
+    - primo accesso per gli amministratori che possono inserire documenti in PDF e immagini con titolo e dettagli sulle lezioni del corso; 
+    - secondo accesso per gli utenti/corsisti dove chiunque può scrivere dei messaggi in una bacheca pubblica
+
+spunto: https://www.immischiati.com/
+

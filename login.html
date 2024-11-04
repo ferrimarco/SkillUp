@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Up™ - Registrazione</title>
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="icon" href="./image/icon.webp">
+    <script src="https://kit.fontawesome.com/4b5158fde0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <a style="text-decoration: none;" href="index.html">
+                <div class="logo">
+                    <img src="./image/logo.png" alt="SkillUp Logo" width="200" height="200">
+                    <h1 class="logo-title">Skill Up</h1>
+                </div>
+                </a>
+                <div class="navlinks">
+                    <a href="index.html">
+                        <i class="fa-solid fa-house"></i>Home
+                    </a>    
+                    <a href="about-us.html">
+                        <i class="fa-solid fa-circle-info"></i>Chi Siamo
+                    </a>
+                    <a href="partner.html">
+                        <i class="fa-solid fa-handshake-simple"></i>Partner
+                    </a>
+                    <a href="reserved-area.html">
+                        <i class="fa-solid fa-hand"></i>Riservato
+                    </a>
+                    <div class="user-log">
+                        <a href="login.html">
+                            <i class="fa-solid fa-user"></i>
+                            Iscriviti
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2 id="hero-title">Iscriviti a Skill-Up!</h2>
+            </div>
+        </section>
+        <section class="registration-form">
+            <form action="./php/sign-up.php" method="post">
+                <div class="form-group">
+                    <div class="username">
+                        <label for="username">Nome utente: </label>
+                        <input type="text" id="username" name="username" placeholder="Inserisci il nome utente..." required>
+                    </div>
+                    <div class="name-card">
+                        <label for="name">Nome: </label>
+                        <input type="text" id="name" name="name" placeholder="Inserisci il tuo nome..." required>
+                    </div>
+                    <div class="surname-card">
+                        <label for="surname">Cognome: </label>
+                        <input type="text" id="surname" name="surname" placeholder="Inserisci il tuo cognome...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Inserisci la tua email..." required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Inserisci la tua password..." required>
+                </div>
+                <button type="submit" class="submit-btn">Registrati</button>
+            </form>
+            <button id="toggle-login" class="toggle-btn">Hai già un account? Accedi qui!</button>
+        </section>
+        
+        <section class="login-form hidden">
+            <form action="./php/login.php" method="post">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" name="login-email" placeholder="Inserisci la tua email..." required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" name="login-password" placeholder="Inserisci la tua password..." required>
+                </div>
+                <button type="submit" class="submit-btn">Accedi</button>
+            </form>
+            <button id="toggle-sign-up" class="toggle-btn">Non possiedi un account? Registrati qui!</button>
+        </section>
+        
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2024 Skill Up™ - Cresci con Noi</p>
+            <div class="social-icons">
+                <p>Seguici su:</p>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./js/login.js"></script>
+</body>
+</html>
