@@ -1,12 +1,34 @@
 <?php
-require_once('./login.php');
-require_once('./db_connect.php'); // Assicurati di includere la connessione al database
+session_start();
+require_once('./db_connect.php');
 
 // Controllo di accesso per l'utente
 if (!isset($_SESSION['user_id'])) {
     echo "Accesso non autorizzato. Ritorna alla pagina di login.";
     exit();
 }
+
+$userId = $_SESSION['user_id'];
+
+// Gestione dell'invio del messaggio
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $message = $_POST['message'];
+
+    if (!empty($message)) {
+        $sql = "INSERT INTO messages (user_id, message) VALUES ('$userId', '$message')";
+        if ($connection->query($sql)) {
+            echo "<script>alert('Messaggio inviato con successo');</script>";
+        } else {
+            echo "<script>alert('Errore durante l\'invio del messaggio');</script>";
+        }
+    } else {
+        echo "<script>alert('Il messaggio non può essere vuoto');</script>";
+    }
+}
+
+// Recupero dei messaggi
+$sql = "SELECT messages.id, messages.message FROM messages ORDER BY messages.id DESC";
+$result = $connection->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -14,8 +36,8 @@ if (!isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Skill Up™ - User dashboard </title>
-    <link rel="stylesheet" href="../css/user.css">
+    <title> Skill Up™ - Bacheca </title>
+    <link rel="stylesheet" href="../css/board.css">
     <link rel="icon" href="../image/icon.webp">
     <script src="https://kit.fontawesome.com/4b5158fde0.js" crossorigin="anonymous"></script>
 </head>
@@ -30,14 +52,14 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </a>
                 <div class="navlinks">
-                    <a href="./user.php">
-                        <i class="fa-solid fa-book"></i> Lezioni
-                    </a>
-                    <a href="./course.php">
-                        <i class="fa-solid fa-graduation-cap"></i> Corsi
-                    </a>
                     <a href="./board.php">
                         <i class="fa-solid fa-chalkboard"></i> Bacheca
+                    </a>
+                    <a href="./news.php">
+                        <i class="fa-solid fa-newspaper"></i> News
+                    </a>
+                    <a href="./user.php">
+                        <i class="fa-solid fa-book"></i> Lezioni
                     </a>
                     <div class="user-log">
                         <?php if (isset($_SESSION['username'])): ?>
@@ -50,32 +72,34 @@ if (!isset($_SESSION['user_id'])) {
         </nav>
     </header>
 
-    <main class="lessons-main">
-        <h2 class="lessons-title">Lezioni Disponibili</h2>
-        <ul class="lessons-list">
-            <?php
-            // Recupera le lezioni dal database
-            $sql = "SELECT title, decription, file FROM lession";
+    <main class="message-board">
+    <h2 class="message-board__title">Bacheca dei Messaggi</h2>
+    
+    <form action="" method="post" class="message-board__form">
+        <textarea name="message" rows="4" cols="50" placeholder="Scrivi il tuo messaggio..." class="message-board__textarea"></textarea><br>
+        <button type="submit" class="message-board__button">Invia Messaggio</button>
+    </form>
+
+    <h3 class="message-board__header">Tutti i Messaggi</h3>
+    <ul class="message-board__list">
+        <?php
+        // Recupero dei messaggi con l'username dell'utente
+            $sql = "SELECT messages.id, messages.message, user.username 
+            FROM messages 
+            JOIN user ON messages.user_id = user.user_id 
+            ORDER BY messages.id DESC";
             $result = $connection->query($sql);
 
-            // Verifica se ci sono lezioni disponibili
             if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<li class='lesson-item'>";
-                    echo "<strong class='lesson-title'>Titolo:</strong> " . htmlspecialchars($row['title']) . "<br>";
-                    echo "<strong class='lesson-details'>Dettagli:</strong> " . htmlspecialchars($row['decription']) . "<br>";
-                    if ($row['file'] !== 'Nessun file caricato') {
-                        echo "<a class='download-link' href='uploads/" . htmlspecialchars($row['file']) . "' target='_blank'>Scarica PDF</a>";
-                    } else {
-                        echo "<span class='no-file'>Nessun file caricato.</span>";
-                    }
-                    echo "</li>";
-                }
-            } else {
-                echo "<li class='no-lessons'>Nessuna lezione disponibile.</li>";
+            while ($row = $result->fetch_assoc()) {
+            echo "<li class='message-board__item'><strong>" . htmlspecialchars($row['username']) . ":</strong> " . htmlspecialchars($row['message']) . "</li>";
             }
-            ?>
-        </ul>
-    </main>
+            } else {
+            echo "<li class='message-board__item'>Nessun messaggio disponibile.</li>";
+            }
+        ?>
+    </ul>
+</main>
+
 </body>
 </html>

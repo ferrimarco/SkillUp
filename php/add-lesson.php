@@ -7,43 +7,41 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-// Recupera l'ID dell'amministratore dalla sessione
 $adminId = $_SESSION['admin_id'];
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recupera i dati dal modulo
     $title = $_POST['title'];
     $details = $_POST['details'];
+    $pdfFilePath = null;
 
     // Verifica se un file è stato caricato
-    if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
+    if (!empty($_FILES['pdf']['name']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
         $pdfName = $_FILES['pdf']['name'];
         $pdfTmpPath = $_FILES['pdf']['tmp_name'];
         
-        // Imposta il percorso di destinazione
         $uploadDir = 'uploads/'; 
         $pdfFilePath = $uploadDir . basename($pdfName);
 
-        // Verifica se la cartella uploads esiste
         if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true); // Crea la cartella se non esiste
+            mkdir($uploadDir, 0755, true);
         }
 
-        // Muovi il file caricato nella cartella uploads
-        if (move_uploaded_file($pdfTmpPath, $pdfFilePath)) {
-            $sql = "INSERT INTO lession (id_admin, title, decription, file) VALUES ('$adminId', '$title', '$details', '$pdfName')";
-            if ($connection->query($sql)) {
-                echo "<script>alert('Lezione caricata con successo');</script>";
-                header('Location: ./admin.php');
-                exit();
-            } else {
-                echo "<script>alert('Errore durante il caricamento nel database');</script>";
-            }
-        } else {
+        if (!move_uploaded_file($pdfTmpPath, $pdfFilePath)) {
             echo "<script>alert('Errore durante il caricamento del file');</script>";
+            exit();
         }
     }
-}
 
+    // Inserimento nel database, considerando il caso in cui $pdfFilePath è vuoto
+    $fileField = $pdfFilePath ? "'$pdfFilePath'" : "NULL";
+    $sql = "INSERT INTO lession (id_admin, title, decription, file) VALUES ('$adminId', '$title', '$details', $fileField)";
+    
+    if ($connection->query($sql)) {
+        echo "<script>alert('Lezione caricata con successo');</script>";
+        header('Location: ./admin.php');
+        exit();
+    } else {
+        echo "<script>alert('Errore durante il caricamento nel database');</script>";
+    }
+}
 ?>

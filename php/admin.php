@@ -59,7 +59,7 @@
                 
                 <div class="form-group">
                     <label for="pdf">Carica PDF:</label>
-                    <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+                    <input type="file" id="pdf" name="pdf" accept="application/pdf">
                 </div>
 
                 <button type="submit">Aggiungi Lezione</button>
